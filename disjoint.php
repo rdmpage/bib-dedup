@@ -1,5 +1,10 @@
 <?php
 
+error_reporting(E_ALL);
+
+// Use https://en.wikipedia.org/wiki/Disjoint-set_data_structure to find components of
+// a graph, these are the clusters.
+
 //----------------------------------------------------------------------------------------
 // Disjoint-set data structure
 

@@ -1,9 +1,7 @@
 <?php
 
-// Given a CSL-JSON list and a TGF file extract unique exemplars for each cluster
-// More sophisticated approach would be to merge data but for now keep it simple
-
-
+// Given a CSL-JSON list and a TGF file we extract arrays of CSL-JSON records that
+// we think belong to the same cluster
 
 $filename = '';
 $output_filename = '';
@@ -19,7 +17,6 @@ else
 	
 	$graph_filename = basename($filename, '.json') . '.tgf';
 }
-
 
 //----------------------------------------------------------------------------------------
 // read TGF file to get clusters
@@ -57,7 +54,10 @@ while (!feof($file_handle))
 				$clusters[$target] = array();
 				$clusters[$target][] = $target;
 			}
-			$clusters[$target][] = $source;
+			if (!in_array($source, $clusters[$target]))
+			{				
+				$clusters[$target][] = $source;
+			}
 		}
 	}
 }
@@ -67,32 +67,71 @@ print_r($clusters);
 
 //----------------------------------------------------------------------------------------
 
-// get records
 
-$merged = array();
+// Get records from CSL JSON file for each cluster and output as separate CSL-JSON
+// arrays so we can process them to get merged references
+
+// this is ugly but can't assume that members of the same cluster are adjacent in the file
 
 $file = @fopen($filename, "r") or die("couldn't open $filename");
-	
-$file_handle = fopen($filename, "r");
-while (!feof($file_handle)) 
+
+
+foreach ($clusters as $target => $sources)
 {
-	$line = trim(fgets($file_handle));	
-
-	$obj = json_decode($line);
-
-	if(json_last_error() == JSON_ERROR_NONE)
+	$cluster_file_name = $target . '.json';
+	file_put_contents($cluster_file_name, "[\n");
+	
+	echo "Sources\n";
+	print_r($sources);
+	
+	$n = 0;
+	
+	$file_handle = fopen($filename, "r");
+	while (!feof($file_handle) && (count($sources) > 0)) 
 	{
-		// could do various things but for now just grab one example
-		
-		if (isset($clusters[$obj[0]->id]) && !isset($merged[$obj[0]->id]))
-		{
-			$merged[$obj[0]->id] = $obj[0];
-		}
-		
+		$line = trim(fgets($file_handle));	
 
+		$obj = json_decode($line);
+
+		if(json_last_error() == JSON_ERROR_NONE)
+		{
+			if (in_array($obj[0]->id, $sources))
+			{
+				$n++;
+				
+				if ($n > 1)
+				{
+					file_put_contents($cluster_file_name, ",\n", FILE_APPEND);
+				}
+				
+				file_put_contents($cluster_file_name, json_encode($obj[1], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE), FILE_APPEND);
+				
+				unset($sources[array_search($obj[0]->id, $sources)]);	
+				
+			}
+			
+			if (in_array($obj[1]->id, $sources))
+			{
+				$n++;
+				
+				if ($n > 1)
+				{
+					file_put_contents($cluster_file_name, ",\n", FILE_APPEND);
+				}
+				
+				file_put_contents($cluster_file_name, json_encode($obj[1], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE), FILE_APPEND);
+				
+				unset($sources[array_search($obj[1]->id, $sources)]);			
+			}
+			
+		}
 	}
+	fclose($file_handle);
+	
+	file_put_contents($cluster_file_name, "\n]\n", FILE_APPEND);
+
+
 }
 
-print_r($merged);
 
 ?>

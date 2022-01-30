@@ -1,8 +1,6 @@
 <?php
 
-// Compare pairs of citations using a simple approach
-
-
+// Compare pairs of citations
 
 error_reporting(E_ALL);
 

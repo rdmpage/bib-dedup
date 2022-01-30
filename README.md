@@ -11,6 +11,25 @@ A program to train a method or model would read pairs of CSL-JSON records and ma
 A program to merge duplicate records would read pairs of CSL-JSON records, decide whether they matched, and output a clustering.
 
 
+## Workflow
+
+- Input is a file of CSL-JSON pairs to be compared. Ways to get this file:
+	- `php tsv-to-window.php` take a TSV file and generate pairs based on a fixed window size. Each pair is a JSON array, one array per line (i.e., `.jsonl` format).
+
+- Take CSL-JSON pairs and compare them, outputting a graph showing the putative clusters: 
+	- `php csl-compare.php <CSL-JSON pairs as arrays>`
+	- output TGF file with clusters
+
+- Take graph file (`.tgf`) and original CSL-JSON pairs and output arrays of CSL-JSON records in each cluster: 
+	- `php merge.php <CSL-JSON pairs as arrays>` (will assume`.tgf` file exists)
+	- output is set of files, one per cluster, each file is an array of one or more CSL-JSON records.
+
+- Take one cluster of CSL-JSON records and compute a ”consensus” for the bibliographic item those records represent
+	- `php merger_metadata.php <cluster id.json>`
+
+- If strong data in a database can generate SQL to update clusters:
+	- `php tgf_to_sql.php <.tgf file>
+
 
 
 
