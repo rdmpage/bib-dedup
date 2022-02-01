@@ -24,7 +24,11 @@ else
 {
 	$filename = $argv[1];
 	
-	$graph_filename = basename($filename, '.json') . '.tgf';
+	$full_filename 	 = realpath($filename);
+	$path_parts		 = pathinfo($full_filename);
+	
+	$working_dir 	 = $path_parts['dirname'];
+	$graph_filename = $working_dir . '/' . $path_parts['filename'] . '.tgf';
 }
 
 //----------------------------------------------------------------------------------------

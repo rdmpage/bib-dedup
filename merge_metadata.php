@@ -210,10 +210,10 @@ function merge ($objs, $confidence = array(), $debug = false)
 	if ($debug)
 	{
 
-		echo "Unique values\n";
+		echo "\nUnique values\n";
 		print_r($unique_values);
 
-		echo "Values\n";
+		echo "\nValues\n";
 		print_r($values);
 	}
 	
@@ -256,12 +256,12 @@ function merge ($objs, $confidence = array(), $debug = false)
 
 	if ($debug)
 	{
-		echo "Vectors\n\n";
+		echo "\nVectors\n\n";
 		foreach ($vectors as $k => $v)
 		{
 			echo str_pad($k, 20, ' ', STR_PAD_LEFT) . ' ' . json_encode($v) . "\n";
 		}
-		echo "\n\n";
+		echo "\n";
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -419,6 +419,11 @@ function merge ($objs, $confidence = array(), $debug = false)
 		}
 	}
 	
+	if ($debug)
+	{
+		echo "\n";
+	}	
+	
 	return $consensus;
 }
 
@@ -437,7 +442,11 @@ else
 {
 	$filename = $argv[1];
 	
-	$merged_filename = basename($filename, '.json') . '.merged.json';
+	$full_filename 	 = realpath($filename);
+	$path_parts		 = pathinfo($full_filename);
+	
+	$working_dir 	 = $path_parts['dirname'];
+	$merged_filename = $working_dir . '/' . $path_parts['filename'] . '.merged.json';
 }
 
 $file = @fopen($filename, "r") or die("couldn't open $filename");
@@ -446,7 +455,7 @@ $file = @fopen($filename, "r") or die("couldn't open $filename");
 $json = file_get_contents($filename);
 $objs = json_decode($json);
 
-$consensus = merge($objs);
+$consensus = merge($objs, [], true);
 
 $merged_json =  json_encode(array($consensus), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 

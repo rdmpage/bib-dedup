@@ -15,7 +15,11 @@ else
 {
 	$filename = $argv[1];
 	
-	$graph_filename = basename($filename, '.json') . '.tgf';
+	$full_filename 	 = realpath($filename);
+	$path_parts		 = pathinfo($full_filename);
+	
+	$working_dir 	 = $path_parts['dirname'];
+	$graph_filename  = $working_dir . '/' . $path_parts['filename'] . '.tgf';
 }
 
 //----------------------------------------------------------------------------------------
@@ -78,7 +82,7 @@ $file = @fopen($filename, "r") or die("couldn't open $filename");
 
 foreach ($clusters as $target => $sources)
 {
-	$cluster_file_name = $target . '.json';
+	$cluster_file_name = $working_dir . '/' . $target . '.json';
 	file_put_contents($cluster_file_name, "[\n");
 	
 	echo "Sources\n";

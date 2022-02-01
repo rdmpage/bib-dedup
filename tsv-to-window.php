@@ -20,7 +20,11 @@ else
 {
 	$filename = $argv[1];
 	
-	$output_filename = basename($filename, '.csv') . '.json';
+	$full_filename 	 = realpath($filename);
+	$path_parts		 = pathinfo($full_filename);
+	
+	$working_dir 	 = $path_parts['dirname'];
+	$output_filename = $working_dir . '/' . $path_parts['filename'] . '.json';
 }
 
 file_put_contents($output_filename, "");

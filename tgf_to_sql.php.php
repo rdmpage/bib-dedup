@@ -16,7 +16,11 @@ else
 {
 	$filename = $argv[1];
 	
-	$output_filename = basename($filename, '.tgf') . '.sql';
+	$full_filename 	 = realpath($filename);
+	$path_parts		 = pathinfo($full_filename);
+	
+	$working_dir 	 = $path_parts['dirname'];
+	$output_filename  = $working_dir . '/' . $path_parts['filename'] . '.sql';
 }
 
 // Read a TGF file 

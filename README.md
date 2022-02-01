@@ -25,7 +25,7 @@ A program to merge duplicate records would read pairs of CSL-JSON records, decid
 	- output is set of files, one per cluster, each file is an array of one or more CSL-JSON records.
 
 - Take one cluster of CSL-JSON records and compute a ”consensus” for the bibliographic item those records represent
-	- `php merger_metadata.php <cluster id.json>`
+	- `php merge_metadata.php <cluster id.json>`
 
 - If strong data in a database can generate SQL to update clusters:
 	- `php tgf_to_sql.php <.tgf file>
