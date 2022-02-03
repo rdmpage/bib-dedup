@@ -63,6 +63,9 @@ system ($command);
 
 echo "Merge to create consensus references...\n";
 
+// clear log file
+file_put_contents($working_dir . '/log.html', '');
+
 $files = scandir($working_dir);
 foreach ($files as $fname)
 {

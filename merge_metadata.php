@@ -5,6 +5,9 @@
 
 error_reporting(E_ALL);
 
+$merge_log_filename = '';
+$log = array();
+$warnings = [];
 
 
 //----------------------------------------------------------------------------------------
@@ -35,6 +38,9 @@ function add_value(&$values, $key, $value, $index)
 // Merge an array of CSL-JSON records
 function merge ($objs, $confidence = array(), $debug = false)
 {
+	global $merge_log_filename;
+	global $log;
+	global $warnings;
 
 	$keys = array('author', 'title', 'container-title', 'volume', 'issue', 'page', 
 		'issued','DOI');
@@ -263,10 +269,29 @@ function merge ($objs, $confidence = array(), $debug = false)
 		}
 		echo "\n";
 	}
+	
+	// log
+	if (0)
+	{
+		$log[] =  '<pre>';
+		
+		$log[] =   "\nVectors\n\n";
+		foreach ($vectors as $k => $v)
+		{
+			$log[] =  str_pad($k, 20, ' ', STR_PAD_LEFT) . ' ' . json_encode($v);
+		}
+		$log[] =   "</pre>";
+	}	
 
 	//----------------------------------------------------------------------------------------
 
 	$consensus = new stdclass;
+	
+	if (1)
+	{
+		$log[] =  '<h3>Belief</h3>';
+		$log[] = '<div style="font-family:monospace;white-space:pre-wrap;">';
+	}	
 
 	foreach ($keys as $k)
 	{
@@ -325,6 +350,12 @@ function merge ($objs, $confidence = array(), $debug = false)
 			{
 				echo str_pad($k, 20, ' ', STR_PAD_LEFT)  . ' ' . json_encode($belief) . "\n";
 			}
+			if (1)
+			{
+				$log[] = str_pad($k, 20, ' ', STR_PAD_LEFT)  . ' ' . json_encode($belief);
+			}
+	
+	
 		
 			$best_value = $best_value  = $unique_values[$k][0];
 			$max_belief = 0;
@@ -341,6 +372,10 @@ function merge ($objs, $confidence = array(), $debug = false)
 			if ($debug)
 			{
 				echo str_pad($k, 20, ' ', STR_PAD_LEFT)  . ' ' . $best_value . "\n";
+			}
+			if (1)
+			{
+				$log[] = str_pad($k, 20, ' ', STR_PAD_LEFT)  . ' ' . $best_value;
 			}
 		
 			switch ($k)
@@ -408,6 +443,14 @@ function merge ($objs, $confidence = array(), $debug = false)
 					}
 					break;
 		
+				case 'page':
+					if (count($belief) > 1)
+					{
+						$warnings[] = "More than one set of pages";
+					}
+					$consensus->{$k} = $best_value;
+					break;
+		
 				default:
 					$consensus->{$k} = $best_value;
 					break;
@@ -419,10 +462,18 @@ function merge ($objs, $confidence = array(), $debug = false)
 		}
 	}
 	
+	
 	if ($debug)
 	{
 		echo "\n";
 	}	
+	
+	if (1)
+	{
+		$log[] = '</div>';
+	}	
+	
+	
 	
 	return $consensus;
 }
@@ -447,19 +498,58 @@ else
 	
 	$working_dir 	 = $path_parts['dirname'];
 	$merged_filename = $working_dir . '/' . $path_parts['filename'] . '.merged.json';
+	
+	$merge_log_filename = $working_dir . '/log.html';
 }
 
 $file = @fopen($filename, "r") or die("couldn't open $filename");
 
-
 $json = file_get_contents($filename);
 $objs = json_decode($json);
+
+if (1)
+{
+	$log[] = '<div style="padding:1em;margin:1em;border:1px solid black;background:#8EFA00;">';
+	$log[] = '<h2>' . $filename . '</h2>';
+}
 
 $consensus = merge($objs, [], true);
 
 $merged_json =  json_encode(array($consensus), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
 echo $merged_json . "\n";
+
+if (1)
+{
+	if (count($warnings) > 0)
+	{
+		$log[0] = '<div style="padding:1em;margin:1em;border:1px solid black;background:#FF9300;">';
+		
+		$log[] = '<h3>Warning</h3>';
+		foreach ($warnings as $warning)
+		{
+			$log[] = $warning;
+		}
+	}
+}
+
+if (1)
+{
+	$log[] = '<h3>Consensus</h3>';
+	$log[] = '<div style="font-family:monospace;white-space:pre-wrap;">';
+	$log[] =  json_encode(array($consensus), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+	$log[] = '</div>';
+}
+
+if (1)
+{
+	$log[] = '</div>';
+}
+
+if (1)
+{
+	file_put_contents($merge_log_filename, join("\n", $log), FILE_APPEND);
+}
 
 file_put_contents($merged_filename, $merged_json);
 
