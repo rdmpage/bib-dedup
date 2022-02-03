@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2fe084de24fb9e6aa05ca37c26160112",
+    "content-hash": "22485abf4bf5198c3f72c59f2203e067",
     "packages": [
         {
             "name": "citation-style-language/locales",
@@ -25,6 +25,47 @@
                 "reference": "master"
             },
             "type": "library"
+        },
+        {
+            "name": "jtet/perceptron",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jtet/Perceptron.git",
+                "reference": "76ea8d355a8424a4af6ad0c339f401318fcbdc36"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jtet/Perceptron/zipball/76ea8d355a8424a4af6ad0c339f401318fcbdc36",
+                "reference": "76ea8d355a8424a4af6ad0c339f401318fcbdc36",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "jtet",
+                    "email": "jtet.github@gmail.com"
+                }
+            ],
+            "description": "Simple PHP implementation of a Perceptron.",
+            "homepage": "https://github.com/jtet/Perceptron",
+            "keywords": [
+                "artificial intelligence",
+                "perceptron"
+            ],
+            "time": "2021-02-04T14:00:30+00:00"
         },
         {
             "name": "myclabs/php-enum",
@@ -220,7 +261,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "citation-style-language/locales": 20,
-        "citation-style-language/styles-distribution": 20
+        "citation-style-language/styles-distribution": 20,
+        "jtet/perceptron": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

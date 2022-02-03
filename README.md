@@ -10,6 +10,17 @@ A program to train a method or model would read pairs of CSL-JSON records and ma
 
 A program to merge duplicate records would read pairs of CSL-JSON records, decide whether they matched, and output a clustering.
 
+### CSL sources
+
+#### BioStor
+https://biostor.org/api.php?id=biostor-272360&format=citeproc
+
+#### BioNames
+http://bionames.org/api/api_citeproc.php?id=a96549adca38c2e1ee7adbd65ef6d20c&style=csljson
+
+#### Wikidata
+https://wikicite-search.herokuapp.com/api.php?id=Q96108337
+
 
 ## Workflow
 
