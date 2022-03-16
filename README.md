@@ -25,7 +25,7 @@ https://wikicite-search.herokuapp.com/api.php?id=Q96108337
 ## Workflow
 
 - Input is a file of CSL-JSON pairs to be compared. Ways to get this file:
-	- `php tsv-to-window.php` take a TSV file and generate pairs based on a fixed window size. Each pair is a JSON array, one array per line (i.e., `.jsonl` format).
+	- `php tsv-to-window.php` take a TSV file and generates pairs based on a fixed window size. Each pair is a JSON array, one array per line (i.e., `.jsonl` format).
 
 - Take CSL-JSON pairs and compare them, outputting a graph showing the putative clusters: 
 	- `php csl-compare.php <CSL-JSON pairs as arrays>`
@@ -38,8 +38,20 @@ https://wikicite-search.herokuapp.com/api.php?id=Q96108337
 - Take one cluster of CSL-JSON records and compute a ”consensus” for the bibliographic item those records represent
 	- `php merge_metadata.php <cluster id.json>`
 
-- If strong data in a database can generate SQL to update clusters:
+- If storing data in a database can generate SQL to update clusters:
 	- `php tgf_to_sql.php <.tgf file>
+
+## Machine learning
+
+A ML approach was explored using `features.php` based on ideas in Wilson. We take a pair of CSL-JSON records and use a binary vector to represent `match`, `non-match`, or `missing` states for fields in those records. This vector can be used in a single layer perception (see `train.php` for some initial attempts to understand the vectors). This approach would be a more sophisticated matching technique.
+
+## Reading
+
+Andrew McCallum, Kamal Nigam, and Lyle H. Ungar. 2000. Efficient clustering of high-dimensional data sets with application to reference matching. In Proceedings of the sixth ACM SIGKDD international conference on Knowledge discovery and data mining (KDD '00). Association for Computing Machinery, New York, NY, USA, 169–178. DOI:https://doi.org/10.1145/347090.347123
+
+Wilson DR. 2011. Beyond probabilistic record linkage: Using neural networks and complex features to improve genealogical record linkage. In: The 2011 International Joint Conference on Neural Networks. 9–14. DOI: 10.1109/IJCNN.2011.6033192.
+
+
 
 
 
