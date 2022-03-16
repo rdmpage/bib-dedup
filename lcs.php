@@ -174,10 +174,14 @@ class LongestCommonSequence
 	function show_alignment()
 	{
 		$this->get_alignment();
+		
+		$result = '';
 
-		echo $this->left . "\n";
-		echo $this->bars . "\n";
-		echo $this->right . "\n";
+		$result .= $this->left . "\n";
+		$result .=  $this->bars . "\n";
+		$result .=  $this->right . "\n";
+		
+		return $result;
 	}
 }
 

@@ -22,6 +22,17 @@ function unaccent($string)
 }
 
 //----------------------------------------------------------------------------------------
+// https://gist.github.com/keithmorris/4155220
+function removeCommonWords($input){
+ 
+ 	// EEEEEEK Stop words
+	$commonWords = array('and', 'der', 'des', 'die', 'do', 'et', 'fur', 'in', 'of', 'the', 'und');
+ 
+	return preg_replace('/\b('.implode('|',$commonWords).')\b/i','',$input);
+}
+
+
+//----------------------------------------------------------------------------------------
 // Clean up text so that we have single spaces between text, 
 // see https://github.com/readmill/API/wiki/Highlight-locators
 function clean_text($text)
@@ -98,7 +109,7 @@ function compare_common_subsequence($text1, $text2, $debug = false)
 	
 	if ($debug)
 	{
-		$lcs->show_alignment();
+		echo $lcs->show_alignment();
 	}
 	
 	$length1 = strlen($text1);
