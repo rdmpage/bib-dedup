@@ -509,7 +509,7 @@ $objs = json_decode($json);
 
 if (1)
 {
-	$log[] = '<div style="padding:1em;margin:1em;border:1px solid black;background:#8EFA00;">';
+	$log[] = '<div style="padding:1em;margin:1em;background:#8EFA00;border-radius:1em;">';
 	$log[] = '<h2>' . $filename . '</h2>';
 }
 
@@ -523,7 +523,7 @@ if (1)
 {
 	if (count($warnings) > 0)
 	{
-		$log[0] = '<div style="padding:1em;margin:1em;border:1px solid black;background:#FF9300;">';
+		$log[0] = '<div style="padding:1em;margin:1em;background:#FF9300;border-radius:1em;">';
 		
 		$log[] = '<h3>Warning</h3>';
 		foreach ($warnings as $warning)
